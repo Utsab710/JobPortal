@@ -104,20 +104,6 @@ function Employer() {
                 />
               </div>
 
-              {/* Address Field */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Address*
-                </label>
-                <FormField
-                  type="text"
-                  placeholder="Enter your address"
-                  name="address"
-                  register={register}
-                  error={errors.address}
-                />
-              </div>
-
               {/* Password Field */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">

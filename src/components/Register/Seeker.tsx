@@ -2,8 +2,9 @@ import React from "react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { useForm } from "react-hook-form";
-import { FormData } from "../../../types";
 import FormField from "./FormField";
+import SeekerAddress from "./SeekerAddress";
+import { FormData } from "../../../types"; // Import the FormData type we defined earlier
 
 function Seeker() {
   const {
@@ -13,14 +14,21 @@ function Seeker() {
     setError,
     reset,
     getValues,
-  } = useForm<FormData>();
+    setValue,
+  } = useForm<FormData>(); // Add the FormData type to useForm
 
+  const handleAddressChange = (value: string) => {
+    setValue("address", value, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  };
   const onSubmit = async (data: FormData) => {
     const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
 
     // Check if the username already exists
     const usernameExists = existingUsers.some(
-      (user: FormData) => user.username === data.username
+      (user) => user.username === data.username
     );
 
     if (usernameExists) {
@@ -32,9 +40,7 @@ function Seeker() {
     }
 
     // Check if the email already exists
-    const userExists = existingUsers.some(
-      (user: FormData) => user.email === data.email
-    );
+    const userExists = existingUsers.some((user) => user.email === data.email);
 
     if (userExists) {
       setError("email", { type: "manual", message: "Email already exists" });
@@ -57,7 +63,7 @@ function Seeker() {
     console.log("SUCCESS", data);
 
     // Reset the form fields
-    reset(); // This clears the form
+    reset();
   };
 
   return (
@@ -87,13 +93,11 @@ function Seeker() {
                   placeholder="eg. janecopper"
                   name="username"
                   register={register}
+                  registerOptions={{
+                    required: "Username is required",
+                  }}
                   error={errors.username}
                 />
-                {errors.username && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.username.message}
-                  </p>
-                )}
               </div>
 
               {/* Email Field */}
@@ -103,18 +107,28 @@ function Seeker() {
                 </label>
                 <FormField
                   type="email"
-                  placeholder="eg. janecopper@xyz.com"
+                  placeholder="eg. utsa@xyz.com"
                   name="email"
                   register={register}
+                  registerOptions={{
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Invalid email address",
+                    },
+                  }}
                   error={errors.email}
                 />
-                {errors.email && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.email.message}
-                  </p>
-                )}
               </div>
 
+              {/* Address Field */}
+              <SeekerAddress
+                register={register}
+                setValue={setValue}
+                error={errors.address}
+              />
+
+              {/* Years of Experience Field */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Years of Experience*
@@ -125,8 +139,8 @@ function Seeker() {
                   name="yearsOfExperience"
                   register={register}
                   registerOptions={{
-                    valueAsNumber: true,
                     required: "Years of experience is required",
+                    valueAsNumber: true,
                     min: {
                       value: 0,
                       message: "Years of experience cannot be negative",
@@ -143,14 +157,9 @@ function Seeker() {
                   }}
                   error={errors.yearsOfExperience}
                 />
-                {errors.yearsOfExperience && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.yearsOfExperience.message}
-                  </p>
-                )}
               </div>
 
-              {/* Password Field */}
+              {/* Password Fields */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Password*
@@ -160,16 +169,17 @@ function Seeker() {
                   placeholder="Enter your password"
                   name="password"
                   register={register}
+                  registerOptions={{
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters",
+                    },
+                  }}
                   error={errors.password}
                 />
-                {errors.password && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.password.message}
-                  </p>
-                )}
               </div>
 
-              {/* Confirm Password Field */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Confirm Password*
@@ -180,20 +190,16 @@ function Seeker() {
                   name="confirmPassword"
                   register={register}
                   registerOptions={{
+                    required: "Please confirm your password",
                     validate: {
                       matchesPreviousPassword: (value) => {
-                        const { password } = getValues();
+                        const password = getValues("password"); // Use getValues here
                         return value === password || "Passwords must match!";
                       },
                     },
                   }}
                   error={errors.confirmPassword}
                 />
-                {errors.confirmPassword && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.confirmPassword.message}
-                  </p>
-                )}
               </div>
             </div>
 
