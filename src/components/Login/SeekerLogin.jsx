@@ -25,7 +25,7 @@ function SeekerLogin() {
       localStorage.setItem("currentSeeker", JSON.stringify(seeker));
 
       // Redirect to Seeker Home Page
-      navigate("/seekerhome"); // Make sure this path exists
+      navigate("/"); // Make sure this path exists
     } else {
       setError("Invalid email or password");
     }
