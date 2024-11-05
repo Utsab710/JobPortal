@@ -8,7 +8,7 @@ import Employer from "./components/Register/Employer";
 import EmployerLogin from "./components/Login/EmployerLogin";
 import SeekerLogin from "./components/Login/SeekerLogin";
 import EmployerHome from "./components/Home/EmployerHome";
-import SeekerHomePage from "./components/Home/SeekerHomepage";
+import Profile from "./components/Seeker/Profile";
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
         <Route path="/employerlogin" element={<EmployerLogin />} />
         <Route path="/seekerlogin" element={<SeekerLogin />} />
         <Route path="/employerhome" element={<EmployerHome />} />
-        <Route path="/seekerhome" element={<SeekerHomePage />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </>
   );
