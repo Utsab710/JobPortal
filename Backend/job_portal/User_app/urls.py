@@ -18,7 +18,7 @@ urlpatterns =   [
      path('login/',login,name='login'),
      path('jobseekerhome/', jobseekerhome ,name='jobseekerhome'),
      path('employerhome/', employerhome ,name='employerhome'),
-     path('users/',include(router.urls)),
+     path('api/',include(router.urls)),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
