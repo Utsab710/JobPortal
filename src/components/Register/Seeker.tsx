@@ -74,7 +74,7 @@ function Seeker() {
           <div>
             <h2 className="text-3xl font-bold text-gray-900 mb-2">
               Welcome to our community of{" "}
-              <span className="text-red-500">HamroJob</span>
+              <span className="text-red-500">JobPortal</span>
             </h2>
             <p className="text-xl text-gray-600">
               Let's explore the opportunities
@@ -90,7 +90,7 @@ function Seeker() {
                 </label>
                 <FormField
                   type="text"
-                  placeholder="eg. janecopper"
+                  placeholder="eg. utsabshrestha"
                   name="username"
                   register={register}
                   registerOptions={{

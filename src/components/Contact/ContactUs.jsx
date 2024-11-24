@@ -86,7 +86,7 @@ export default function ContactUs() {
                     />
                   </svg>
                   <div className="ml-4 text-md tracking-wide font-semibold w-40">
-                    info@hamrojob.com
+                    info@JobPortal.com
                   </div>
                 </div>
               </div>

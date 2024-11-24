@@ -9,6 +9,8 @@ import EmployerLogin from "./components/Login/EmployerLogin";
 import SeekerLogin from "./components/Login/SeekerLogin";
 import EmployerHome from "./components/Home/EmployerHome";
 import Profile from "./components/Seeker/Profile";
+import Eprofile from "./components/Employer/Eprofile";
+import Postjob from "./components/Employer/Postjob";
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
         <Route path="/seekerlogin" element={<SeekerLogin />} />
         <Route path="/employerhome" element={<EmployerHome />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/eprofile" element={<Eprofile />} />
+        <Route path="/postjob" element={<Postjob />} />
       </Routes>
     </>
   );

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Header from "../Header/Header";
 
 function EmployerHome() {
   const [userName, setUserName] = useState("");
@@ -15,14 +16,17 @@ function EmployerHome() {
   }, []);
 
   return (
-    <div className="homepage">
-      <h1>Home Page</h1>
-      {userName ? (
-        <p>Welcome, {userName}!</p> // Show personalized welcome message with username
-      ) : (
-        <p>Welcome to the platform!</p> // Default message for non-logged-in users
-      )}
-    </div>
+    <>
+      <Header />
+      <div className="homepage">
+        <h1>Home Page</h1>
+        {userName ? (
+          <p>Welcome, {userName}!</p> // Show personalized welcome message with username
+        ) : (
+          <p>Welcome to the platform!</p> // Default message for non-logged-in users
+        )}
+      </div>
+    </>
   );
 }
 

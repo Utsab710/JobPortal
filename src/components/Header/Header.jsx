@@ -6,14 +6,21 @@ export default function Header() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState(null);
+  const [userType, setUserType] = useState(null); // 'seeker' or 'employer'
   const loginDropdownRef = useRef(null);
   const registerDropdownRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("currentSeeker"));
-    if (user) {
-      setLoggedInUser(user);
+    const seeker = JSON.parse(localStorage.getItem("currentSeeker"));
+    const employer = JSON.parse(localStorage.getItem("currentEmployer"));
+
+    if (seeker) {
+      setLoggedInUser(seeker);
+      setUserType("seeker");
+    } else if (employer) {
+      setLoggedInUser(employer);
+      setUserType("employer");
     }
   }, []);
 
@@ -28,15 +35,19 @@ export default function Header() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("currentSeeker");
+    if (userType === "seeker") {
+      localStorage.removeItem("currentSeeker");
+    } else {
+      localStorage.removeItem("currentEmployer");
+    }
     setLoggedInUser(null);
+    setUserType(null);
     navigate("/");
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (loggedInUser) {
-        // Only check login dropdown ref when logged in
         if (
           loginDropdownRef.current &&
           !loginDropdownRef.current.contains(event.target)
@@ -44,7 +55,6 @@ export default function Header() {
           setIsLoginOpen(false);
         }
       } else {
-        // Check both refs when not logged in
         if (
           loginDropdownRef.current &&
           !loginDropdownRef.current.contains(event.target) &&
@@ -63,14 +73,58 @@ export default function Header() {
     };
   }, [loginDropdownRef, registerDropdownRef, loggedInUser]);
 
+  const renderProfileDropdown = () => {
+    if (userType === "seeker") {
+      return (
+        <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-300 rounded-md shadow-lg z-10">
+          <Link
+            to="/profile"
+            className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+          >
+            Profile
+          </Link>
+          <Link
+            to="/applied-jobs"
+            className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+          >
+            Applied Jobs
+          </Link>
+        </div>
+      );
+    } else {
+      return (
+        <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-300 rounded-md shadow-lg z-10">
+          <Link
+            to="/profile"
+            className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+          >
+            Profile
+          </Link>
+          <Link
+            to="/manage-jobs"
+            className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+          >
+            Manage Jobs
+          </Link>
+          <Link
+            to="/applications"
+            className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+          >
+            View Applications
+          </Link>
+        </div>
+      );
+    }
+  };
+
   return (
     <header className="shadow sticky z-50 top-0">
       <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <Link to="/" className="flex items-center">
             <div className="flex items-center">
-              <span className="text-red-500 font-bold text-2xl mr-2">HJ</span>
-              <span className="font-semibold text-xl">HamroJob</span>
+              <span className="text-red-500 font-bold text-2xl mr-2">JP</span>
+              <span className="font-semibold text-xl">JobPortal</span>
             </div>
           </Link>
 
@@ -85,22 +139,7 @@ export default function Header() {
                     <span>{loggedInUser.username}</span>
                     <IoMdArrowDropdown className="w-5 h-5" />
                   </button>
-                  {isLoginOpen && (
-                    <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-300 rounded-md shadow-lg z-10">
-                      <Link
-                        to="/profile"
-                        className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                      >
-                        Profile
-                      </Link>
-                      <Link
-                        to="/applied-jobs"
-                        className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                      >
-                        Applied Jobs
-                      </Link>
-                    </div>
-                  )}
+                  {isLoginOpen && renderProfileDropdown()}
                 </div>
                 <button
                   onClick={handleLogout}
@@ -176,18 +215,20 @@ export default function Header() {
             id="mobile-menu-2"
           >
             <ul className="flex font-medium lg:flex-row lg:space-x-8">
-              <li>
-                <NavLink
-                  to="/"
-                  className={({ isActive }) =>
-                    `${
-                      isActive ? "text-orange-700" : "text-gray-700"
-                    } hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
-                  }
-                >
-                  Home
-                </NavLink>
-              </li>
+              {(!loggedInUser || userType === "seeker") && (
+                <li>
+                  <NavLink
+                    to="/"
+                    className={({ isActive }) =>
+                      `${
+                        isActive ? "text-orange-700" : "text-gray-700"
+                      } hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
+                    }
+                  >
+                    Home
+                  </NavLink>
+                </li>
+              )}
               <li>
                 <NavLink
                   to="/about"
@@ -200,7 +241,7 @@ export default function Header() {
                   About
                 </NavLink>
               </li>
-              {!loggedInUser ? (
+              {!loggedInUser && (
                 <li>
                   <NavLink
                     to="/contact"
@@ -213,30 +254,73 @@ export default function Header() {
                     Contact Us
                   </NavLink>
                 </li>
-              ) : (
+              )}
+              {loggedInUser && userType === "seeker" && (
+                <li>
+                  <NavLink
+                    to="/profile"
+                    className={({ isActive }) =>
+                      `block py-2 pr-4 pl-3 duration-200 ${
+                        isActive ? "text-orange-700" : "text-gray-700"
+                      } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
+                    }
+                  >
+                    Profile
+                  </NavLink>
+                </li>
+              )}
+              {loggedInUser && userType === "seeker" && (
+                <li>
+                  <NavLink
+                    to="/applied-jobs"
+                    className={({ isActive }) =>
+                      `block py-2 pr-4 pl-3 duration-200 ${
+                        isActive ? "text-orange-700" : "text-gray-700"
+                      } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
+                    }
+                  >
+                    Applied Jobs
+                  </NavLink>
+                </li>
+              )}
+              {loggedInUser && userType === "employer" && (
+                <li>
+                  <NavLink
+                    to="/eprofile"
+                    className={({ isActive }) =>
+                      `block py-2 pr-4 pl-3 duration-200 ${
+                        isActive ? "text-orange-700" : "text-gray-700"
+                      } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
+                    }
+                  >
+                    Profile
+                  </NavLink>
+                </li>
+              )}
+              {loggedInUser && userType === "employer" && (
                 <>
                   <li>
                     <NavLink
-                      to="/profile"
+                      to="/postjob"
                       className={({ isActive }) =>
                         `block py-2 pr-4 pl-3 duration-200 ${
                           isActive ? "text-orange-700" : "text-gray-700"
                         } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
                       }
                     >
-                      Profile
+                      Post Jobs
                     </NavLink>
                   </li>
                   <li>
                     <NavLink
-                      to="/applied-jobs"
+                      to="/selection"
                       className={({ isActive }) =>
                         `block py-2 pr-4 pl-3 duration-200 ${
                           isActive ? "text-orange-700" : "text-gray-700"
                         } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
                       }
                     >
-                      Applied Jobs
+                      Selection
                     </NavLink>
                   </li>
                 </>
