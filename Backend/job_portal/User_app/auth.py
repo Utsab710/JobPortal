@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate ,login as auth_login
+from rest_framework_simplejwt.tokens import AccessToken
 from .forms import Login,UserSignup
+from django.http import JsonResponse
 
 def signup(request):
     if request.method == "POST":
@@ -54,6 +56,10 @@ def login(request):
             
             user = authenticate(request, username=username, password=password)
             if user is not None:
+
+                '''
+                Session Based Authentication
+                '''
                 auth_login(request, user)
                 print(user.isEmployer)
                 if user.isEmployer:
@@ -62,6 +68,16 @@ def login(request):
                 else:
                     print("jobseek")
                     return redirect('jobseekerhome') 
+
+                '''
+                JWT Based Authentication
+                '''
+                # access_token = AccessToken.for_user(user)
+
+                # return JsonResponse({
+                #     'access': str(access_token),
+                # }, status=200)
+                
             else:
                 form.add_error(None, 'Invalid email or password.')
         else:

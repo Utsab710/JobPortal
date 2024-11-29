@@ -5,7 +5,10 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 from User_app.views import *
 from .user_viewset import UsersViewsets
-
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView, 
+    TokenRefreshView,    
+)
 
 router = DefaultRouter()
 router.register('users',UsersViewsets,basename='UsersViewsets')
@@ -19,6 +22,8 @@ urlpatterns =   [
      path('jobseekerhome/', jobseekerhome ,name='jobseekerhome'),
      path('employerhome/', employerhome ,name='employerhome'),
      path('api/',include(router.urls)),
+    
 ]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

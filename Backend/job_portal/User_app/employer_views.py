@@ -1,6 +1,33 @@
 from django.shortcuts import render,redirect
 from .forms import EmployeerSignup
 from .models import CustomUser
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.authtoken.models import Token 
+from django.contrib.auth import authenticate
+
+from rest_framework.authtoken.views import ObtainAuthToken 
+
+
+@csrf_exempt
+def gettoken(request):
+    if request.method == 'POST':
+        # Assuming you have a user authentication system in place:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Authenticate the user
+        user = authenticate(username=username, password=password)
+
+        if user is not None and user.is_active:
+            token, created = Token.objects.get_or_create(user=user)
+            return JsonResponse({'token': token.key})
+        else:
+            return JsonResponse({'error': 'Invalid credentials'}, status=401) 
+
+    else:
+        return JsonResponse({'error': 'Method Not Allowed'}, status=405) 
+
 
 def employerhome(request):
     return render(request, "employerhome.html")
