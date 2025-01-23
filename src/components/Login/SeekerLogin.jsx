@@ -37,7 +37,7 @@ function SeekerLogin() {
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
         <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-8">
           <h2 className="text-2xl font-bold text-center text-gray-700 mb-4">
-            Welcome back to <span className="text-red-600">HamroJob</span>
+            Welcome back to <span className="text-red-600">JobPortal</span>
           </h2>
 
           {error && <p className="text-red-500 text-center">{error}</p>}
@@ -55,7 +55,7 @@ function SeekerLogin() {
                 name="email"
                 type="email"
                 required
-                placeholder="eg. Janecopper@xyz.com"
+                placeholder="eg. utsab@xyz.com"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

@@ -17,7 +17,7 @@ function About() {
             </div>
             <div className="md:7/12 lg:w-6/12">
               <h2 className="text-2xl text-gray-900 font-bold md:text-4xl">
-                HamroJob is an online job portal system
+                JobPortal is an online job portal system
               </h2>
               <p className="mt-6 text-gray-600">
                 Our system is an online job system where job seekers can look

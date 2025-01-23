@@ -8,8 +8,8 @@ export default function Footer() {
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">
             <div className="flex items-center">
-              <span className="text-red-500 font-bold text-2xl mr-2">HJ</span>
-              <span className="font-semibold text-xl">HamroJob</span>
+              <span className="text-red-500 font-bold text-2xl mr-2">JP</span>
+              <span className="font-semibold text-xl">JobPortal</span>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
@@ -54,7 +54,7 @@ export default function Footer() {
         <div className="sm:flex sm:items-center sm:justify-between">
           <span className="text-sm text-gray-500 sm:text-center">
             © 2024
-            <span className="hover:underline">HamroJob</span>. All Rights
+            <span className="hover:underline">JobPortal</span>. All Rights
             Reserved.
           </span>
         </div>
